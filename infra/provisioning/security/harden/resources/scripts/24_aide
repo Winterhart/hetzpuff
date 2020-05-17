@@ -1,0 +1,42 @@
+function f_aide {
+  echo "[$SCRIPT_COUNT] Aide configuration"
+
+  if ! grep -R -E '^!/var/lib/lxcfs/cgroup$' /etc/aide/*; then
+    echo '!/var/lib/lxcfs/cgroup' > /etc/aide/aide.conf.d/70_aide_lxcfs
+  fi
+
+  if ! grep -R -E '^!/var/lib/docker$' /etc/aide/*; then
+    echo '!/var/lib/docker' > /etc/aide/aide.conf.d/70_aide_docker
+  fi
+
+  ((SCRIPT_COUNT++))
+}
+
+function f_aide_post {
+  echo "[$SCRIPT_COUNT] Running Aide, this will take a while"
+
+  aideinit --yes
+
+  ((SCRIPT_COUNT++))
+}
+
+function f_aide_timer {
+  if ! [ -f /etc/cron.daily/aide ]; then
+    echo "[$SCRIPT_COUNT] Enable daily Aide check"
+
+    cp ./config/aidecheck.service /etc/systemd/system/aidecheck.service
+    cp ./config/aidecheck.timer /etc/systemd/system/aidecheck.timer
+    chmod 0644 /etc/systemd/system/aidecheck.*
+
+    systemctl reenable aidecheck.timer
+    systemctl restart aidecheck.timer
+    systemctl daemon-reload
+
+    if [[ $VERBOSE == "Y" ]]; then
+      systemctl status aidecheck.timer --no-pager
+      echo
+    fi
+
+    ((SCRIPT_COUNT++))
+  fi
+}

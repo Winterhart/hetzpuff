@@ -1,0 +1,32 @@
+function f_sudo {
+  echo "[$SCRIPT_COUNT] sudo configuration"
+
+  if ! grep -qER '^Defaults.*use_pty$' /etc/sudo*; then
+    echo "Defaults use_pty" > /etc/sudoers.d/011_use_pty
+  fi
+
+  if ! grep -qER '^Defaults.*logfile' /etc/sudo*; then
+    echo 'Defaults logfile="/var/log/sudo.log"' > /etc/sudoers.d/012_logfile
+  fi
+
+  if ! grep -qER '^Defaults.*pwfeedback' /etc/sudo*; then
+    echo 'Defaults !pwfeedback' > /etc/sudoers.d/013_pwfeedback
+  fi
+
+  if ! grep -qER '^Defaults.*visiblepw' /etc/sudo*; then
+    echo 'Defaults !visiblepw' > /etc/sudoers.d/014_visiblepw
+  fi
+
+  if ! grep -qER '^Defaults.*passwd_timeout' /etc/sudo*; then
+    echo 'Defaults passwd_timeout=5' > /etc/sudoers.d/15_timeout
+  fi
+
+  find /etc/sudoers.d/ -type f -name '[0-9]*' -exec chmod 0440 {} \;
+
+  if [[ $VERBOSE == "Y" ]]; then
+    sudo -ll
+    echo
+  fi
+
+  ((SCRIPT_COUNT++))
+}

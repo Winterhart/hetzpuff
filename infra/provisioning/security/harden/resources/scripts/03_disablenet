@@ -1,0 +1,13 @@
+function f_disablenet {
+  echo "[$SCRIPT_COUNT] Disable misc network protocols"
+
+  local NET
+  NET="dccp sctp rds tipc"
+  for disable in $NET; do
+    if ! grep -q "$disable" "$DISABLENET" 2> /dev/null; then
+      echo "install $disable /bin/true" >> "$DISABLENET"
+    fi
+  done
+
+  ((SCRIPT_COUNT++))
+}

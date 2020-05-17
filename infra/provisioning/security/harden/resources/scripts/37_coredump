@@ -1,0 +1,17 @@
+function f_coredump {
+  if test -f "$COREDUMPCONF"; then
+
+    echo "[$SCRIPT_COUNT] Systemd/coredump.conf"
+    sed -i 's/^#Storage=.*/Storage=none/' "$COREDUMPCONF"
+    sed -i 's/^#ProcessSizeMax=.*/ProcessSizeMax=0/' "$COREDUMPCONF"
+
+    systemctl restart systemd-journald
+
+    if [[ $VERBOSE == "Y" ]]; then
+      systemctl status systemd-journald --no-pager
+      echo
+    fi
+
+    ((SCRIPT_COUNT++))
+  fi
+}

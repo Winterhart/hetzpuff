@@ -1,0 +1,57 @@
+function f_package_install {
+  echo "[$SCRIPT_COUNT] Installing base packages"
+
+  local APPARMOR
+  local AUDITD
+  local VM
+
+  APPARMOR="apparmor-profiles apparmor-utils libpam-apparmor"
+  AUDITD="auditd"
+  VM=""
+
+  if dmesg | grep -i -E "dmi.*vmware"; then
+    VM="open-vm-tools"
+  fi
+
+  if dmesg | grep -i -E "dmi.*virtualbox"; then
+    VM="virtualbox-guest-dkms virtualbox-guest-utils"
+  fi
+
+  if [[ $LXC == "1" ]]; then
+    APPARMOR=""
+    AUDITD=""
+  fi
+
+  echo "postfix postfix/main_mailer_type select Internet Site" | debconf-set-selections
+  echo "postfix postfix/mailname string $(hostname -f)" | debconf-set-selections
+  local PACKAGE_INSTALL
+  # Removing update-notifier-common because it's creating a unwanted terminal question
+  PACKAGE_INSTALL="acct aide-common debsums gnupg2 haveged libpam-cracklib libpam-tmpdir needrestart openssh-server postfix rkhunter sysstat systemd-coredump tcpd  vlock $APPARMOR $AUDITD $VM"
+
+  for deb_install in $PACKAGE_INSTALL; do
+    $APT install -y --no-install-recommends "$deb_install"
+  done
+
+
+
+  if dpkg -l | grep -q sysstat; then
+    sed -i 's/ENABLED=.*/ENABLED="true"/' /etc/default/sysstat
+    systemctl enable sysstat
+  fi
+
+  ((SCRIPT_COUNT++))
+}
+
+function f_package_remove {
+  echo "[$SCRIPT_COUNT] Package removal"
+
+  # rsync or/and autofs seems to be used by etcd
+  local PACKAGE_REMOVE
+  PACKAGE_REMOVE="apport* autofs avahi* beep git pastebinit popularity-contest rsh* rsync talk* telnet* tftp* whoopsie xinetd yp-tools ypbind"
+
+  for deb_remove in $PACKAGE_REMOVE; do
+    $APT purge "$deb_remove"
+  done
+
+  ((SCRIPT_COUNT++))
+}

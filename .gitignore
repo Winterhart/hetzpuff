@@ -1,0 +1,74 @@
+# Ignore node modules
+node_modules/**/*
+
+# Ignore App file
+.expo/*
+npm-debug.*
+*.jks
+*.p12
+*.key
+*.mobileprovision
+*.tfvars.json
+
+# Environment Variables
+.env
+.DS_Store
+*.iml
+*.ignore
+
+# Untracked Directory
+.idea/
+node_modules/
+
+# Ignore Package-lock.json
+package-lock.json
+
+# Ignore log file made by NPM
+
+*.log
+npm-debug-log.*
+
+# Ignore release folder
+build/Release
+
+# Ignore cache directory
+.npm
+
+# Ignore Target of Typescript
+dist
+
+#Ignore IDE/Notepade File
+.vscode 
+
+# Ignore .nyc folder produce by converage test report
+.nyc_output/
+coverage/
+
+# Ignore .expo directory
+*/.expo
+.expo-shared
+
+# Ignore terraform file
+.terraform
+
+# Ignoring the variables of tf
+variables.tf
+
+# Ignore tf state
+*.tfstate
+
+# Ignore tf plan
+plan
+
+# Ignore generated state
+terraform.tfstate.d
+terraform.tfstate.backup
+
+# Ignore all yaml ending with secret because they are secret
+*secret.yaml
+
+# Ignore autogen file by hardening solution
+ubuntu.cfg
+
+# Ignore auto-gen ip.json file
+IP.json
