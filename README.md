@@ -35,6 +35,14 @@ The X nodes talk together using a private VPN.
 
 This script is also trying to install the latest available kubernetes version.
 
+**Sample Results:**
+
+![alt text](https://github.com/Winterhart/hetzpuff/blob/master/docs/fromKubeCtl.png "")
+
+**From Hetzner Dashboard**
+
+![alt text](https://github.com/Winterhart/hetzpuff/blob/master/docs/hetzner_cluster.png "")
+
 ## Hardening
 
 The first hardening is about securing the VM and not in the Kubernetes cluster.
@@ -45,8 +53,7 @@ the VM before hardening the "Kubernetes layer"
 
 ## Source
 
-This project is made from other projects. This project
-is binding together:
+This project is made from other projects:
 
-- Kubernetes Creation Script (https://github.com/hobby-kube/provisioning)
+- Kubernetes Cluster Creation Script (https://github.com/hobby-kube/provisioning)
 - Hardening Scripts (https://github.com/konstruktoid/hardening)
