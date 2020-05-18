@@ -43,6 +43,8 @@ This script is also trying to install the latest available kubernetes version.
 
 ![alt text](https://github.com/Winterhart/hetzpuff/blob/master/docs/hetzner_cluster.png "")
 
+Those IPs are not used anymore ;) 
+
 ## Hardening
 
 The first hardening is about securing the VM and not in the Kubernetes cluster.
